@@ -6,7 +6,7 @@
  */
 import { UTCISODateFromString } from "@pagopa/ts-commons/lib/dates";
 import { NonEmptyString } from "@pagopa/ts-commons/lib/strings";
-import { distanceInWordsToNow, isAfter, subDays } from "date-fns";
+import { formatDistanceToNow, isAfter, subDays } from "date-fns";
 import { Request as ExpressRequest } from "express";
 import { predicate as PR } from "fp-ts";
 import { flatten } from "fp-ts/lib/Array";
@@ -386,7 +386,7 @@ export const logSamlCertExpiration = (samlCert: string): void => {
   try {
     const out = pki.certificateFromPem(samlCert);
     if (out.validity.notAfter) {
-      const timeDiff = distanceInWordsToNow(out.validity.notAfter);
+      const timeDiff = formatDistanceToNow(out.validity.notAfter);
       const warningDate = subDays(new Date(), 60);
       if (isAfter(out.validity.notAfter, warningDate)) {
         logger.info("samlCert expire in %s", timeDiff);
